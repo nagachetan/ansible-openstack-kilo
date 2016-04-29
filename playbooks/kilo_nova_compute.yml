@@ -11,11 +11,11 @@
      sudo: yes
 
      tasks:
-       #- name: Install the components
-       #  apt: name={{ item }} state=present
-       #  with_items:
-       #      - nova-compute
-       #      - sysfsutils
+       - name: Install the components
+         apt: name={{ item }} state=present
+         with_items:
+             - nova-compute
+             - sysfsutils
 
        - name: Update /etc/nova/nova.conf
          ini_file: dest=/etc/nova/nova.conf
@@ -46,6 +46,24 @@
        - name: Update /etc/nova/nova.conf
          ini_file: dest=/etc/nova/nova.conf
                    section=oslo_messaging_rabbit
+                   option=rabbit_password
+                   value={{ rabbit.rabbit_pass }}
+        
+       - name: Update /etc/nova/nova.conf
+         ini_file: dest=/etc/nova/nova.conf
+                   section=DEFAULT
+                   option=rabbit_host
+                   value=controller
+
+       - name: Update /etc/nova/nova.conf
+         ini_file: dest=/etc/nova/nova.conf
+                   section=DEFAULT
+                   option=rabbit_userid
+                   value=openstack
+
+       - name: Update /etc/nova/nova.conf
+         ini_file: dest=/etc/nova/nova.conf
+                   section=DEFAULT
                    option=rabbit_password
                    value={{ rabbit.rabbit_pass }}
 
