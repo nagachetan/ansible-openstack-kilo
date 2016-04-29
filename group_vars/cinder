@@ -3,7 +3,10 @@ db:
   openstack_dbpass: CINDER_DBPASS
   openstack_manage: cinder-manage
 
-db_sync: db_sync
+db_sync: db sync
+
+rabbit:
+  rabbit_pass: RABBIT_PASS
 
 cinder:
   cinder_pass: CINDER_PASS
