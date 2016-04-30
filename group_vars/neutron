@@ -19,4 +19,4 @@ rabbit:
 nova:
   nova_pass: NOVA_PASS
 
-interface: eth2
+interface: eth0

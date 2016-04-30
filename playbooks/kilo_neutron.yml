@@ -9,6 +9,16 @@
 
      sudo: yes
 
+     environment:
+            OS_PROJECT_DOMAIN_ID: default
+            OS_USER_DOMAIN_ID: default
+            OS_PROJECT_NAME: admin
+            OS_PASSWORD: ADMIN_PASS
+            OS_AUTH_URL: http://controller:35357/v3
+            OS_USERNAME: admin
+            OS_TENANT_NAME: admin
+            OS_URL: http://controller:35357/v2.0
+
      tasks:
        - name: Create database for neutron
          #mysql_db: db={{ db.db_name }} state=present
@@ -21,52 +31,16 @@
          shell: ./grant_prev.sh chdir=/tmp/
 
        - name: Create neutron user
-         command: 'openstack user create neutron --password {{ glance.glance_pass }}'
-         environment:
-            OS_PROJECT_DOMAIN_ID: default
-            OS_USER_DOMAIN_ID: default
-            OS_PROJECT_NAME: admin
-            OS_PASSWORD: ADMIN_PASS
-            OS_AUTH_URL: http://controller:35357/v3
-            OS_USERNAME: admin
-            OS_TENANT_NAME: admin
-            OS_URL: http://controller:35357/v2.0
+         command: 'openstack user create neutron --password {{ neutron.neutron_pass }}'
 
        - name: Add admin role to neutron user
          shell: 'openstack role add --project service --user neutron admin'
-         environment:
-            OS_PROJECT_DOMAIN_ID: default
-            OS_USER_DOMAIN_ID: default
-            OS_PROJECT_NAME: admin
-            OS_PASSWORD: ADMIN_PASS
-            OS_AUTH_URL: http://controller:35357/v3
-            OS_USERNAME: admin
-            OS_TENANT_NAME: admin
-            OS_URL: http://controller:35357/v2.0
       
        - name: Service create
          command: 'openstack service create --name neutron --description "OpenStack Networking" network'
-         environment:
-            OS_PROJECT_DOMAIN_ID: default
-            OS_USER_DOMAIN_ID: default
-            OS_PROJECT_NAME: admin
-            OS_PASSWORD: ADMIN_PASS
-            OS_AUTH_URL: http://controller:35357/v3
-            OS_USERNAME: admin
-            OS_TENANT_NAME: admin
-            OS_URL: http://controller:35357/v2.0
 
        - name: Image api endpoint
          command: 'openstack endpoint create --publicurl http://controller:9696 --internalurl http://controller:9696 --adminurl http://controller:9696 --region RegionOne network'
-         environment:
-            OS_PROJECT_DOMAIN_ID: default
-            OS_USER_DOMAIN_ID: default
-            OS_PROJECT_NAME: admin
-            OS_PASSWORD: ADMIN_PASS
-            OS_AUTH_URL: http://controller:35357/v3
-            OS_USERNAME: admin
-            OS_TENANT_NAME: admin
-            OS_URL: http://controller:35357/v2.0
 
        - name: Install Packages
          apt: name={{ item }} state=present
@@ -87,6 +61,12 @@
                    section=oslo_messaging_rabbit
                    option=rabbit_host
                    value=controller
+
+       - name: Configure conf
+         ini_file: dest=/etc/neutron/neutron.conf
+                   section=DEFAULT
+                   option=rpc_backend
+                   value=rabbit
 
        - name: Configure conf
          ini_file: dest=/etc/neutron/neutron.conf
@@ -198,6 +178,12 @@
                    section=DEFAULT
                    option=notify_nova_on_port_data_changes
                    value=True
+
+       - name: Update /etc/neutron/neutron.conf
+         ini_file: dest=/etc/neutron/neutron.conf
+                   section=DEFAULT
+                   option=nova_url
+                   value=http://controller:8774/v2
 
        - name: Update /etc/neutron/neutron.conf
          ini_file: dest=/etc/neutron/neutron.conf
