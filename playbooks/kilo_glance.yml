@@ -1,7 +1,7 @@
 ---
    - name: Install Glance
 
-     hosts: client1
+     hosts: client_one
      
      vars_files: 
        - ../group_vars/all
@@ -10,9 +10,9 @@
      sudo: yes
 
      tasks:
-       - name: Create database for glance
+       #- name: Create database for glance
          #mysql_db: db={{ db.db_name }} state=present
-         command: mysql -u {{ db_main.root_db_user }} -p{{db_main.root_db_password}} -e 'CREATE DATABASE {{ db.db_name }};'
+       #  command: mysql -u {{ db_main.root_db_user }} -p{{db_main.root_db_password}} -e 'CREATE DATABASE {{ db.db_name }};'
        
        - name: Create access to glance database
          template: src=../templates/grant_prev.j2 dest=/tmp/grant_prev.sh mode=0777 

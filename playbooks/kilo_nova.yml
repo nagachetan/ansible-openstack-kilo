@@ -2,7 +2,7 @@
 
    - name: Install Nova controller components
 
-     hosts: client1
+     hosts: client_one
 
      vars_files:
        - ../group_vars/all

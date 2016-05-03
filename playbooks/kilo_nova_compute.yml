@@ -2,7 +2,7 @@
 
    - name: Install Nova compute components
 
-     hosts: client1
+     hosts: client_two
 
      vars_files:
        - ../group_vars/all

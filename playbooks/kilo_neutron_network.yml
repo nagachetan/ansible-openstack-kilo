@@ -1,7 +1,7 @@
 ---
    - name: Install Neutron on network node
 
-     hosts: client1
+     hosts: client_three
 
      vars_files:
        - ../group_vars/all

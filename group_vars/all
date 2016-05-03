@@ -6,5 +6,5 @@ db_main:
   
 ip:
   controller_ip: 192.168.56.14
-  compute_ip: 192.168.56.11
-  neutron_ip: 192.168.56.15
+  compute_ip: 192.168.56.16
+  neutron_ip: 192.168.56.17

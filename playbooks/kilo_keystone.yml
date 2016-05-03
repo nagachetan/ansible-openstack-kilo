@@ -1,7 +1,7 @@
 ---
    
    - name: Install Keystone
-     hosts: client1
+     hosts: client_one
      vars_files: 
        - ../group_vars/all
        - ../group_vars/keystone
@@ -205,12 +205,12 @@
          tags:
            - dbsync
 
-       - name: Update to mysql
-         ini_file: dest=/etc/keystone/keystone.conf
-                   section=token
-                   option=driver
-                   value=keystone.token.persistence.backends.mysql.Token
-                   backup=yes
+       #- name: Update to mysql
+       #  ini_file: dest=/etc/keystone/keystone.conf
+       #            section=token
+       #            option=driver
+       #            value=keystone.token.persistence.backends.mysql.Token
+       #            backup=yes
 
        - name: Service apache2 restart
          service: name=apache2 state=restarted

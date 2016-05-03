@@ -1,7 +1,7 @@
 ---
    - name: Install Cinder
 
-     hosts: client1
+     hosts: client_four
 
      vars_files:
        - ../group_vars/all
